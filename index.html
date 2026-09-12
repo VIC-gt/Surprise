@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0906">
+<title>Happy Birthday, Dad</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:#0b0906;
+    --orange:#ff7a29;
+    --orange-deep:#c8501a;
+    --gold:#e3a542;
+    --ink:#f5efe6;
+    --ink-dim:#cbbfae;
+    --glass: rgba(245,239,230,0.06);
+    --glass-strong: rgba(245,239,230,0.10);
+    --glass-border: rgba(245,239,230,0.16);
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0; padding:0; min-height:100%;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    overflow-x:hidden;
+  }
+
+  #confetti-canvas{
+    position:fixed; inset:0; z-index:0; display:block;
+  }
+
+  .glow{
+    position:fixed;
+    width:70vmax; height:70vmax;
+    left:50%; top:50%;
+    transform:translate(-50%,-55%);
+    background:radial-gradient(circle at center, rgba(255,122,41,0.16), rgba(255,122,41,0) 60%);
+    z-index:0; pointer-events:none;
+    animation:drift 14s ease-in-out infinite alternate;
+  }
+  @keyframes drift{
+    from{ transform:translate(-53%,-58%) scale(1); }
+    to{ transform:translate(-47%,-52%) scale(1.08); }
+  }
+
+  main{
+    position:relative; z-index:1;
+    min-height:100dvh; min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:6vh 6vw;
+  }
+
+  .stage{
+    display:grid;
+    width:min(560px, 100%);
+  }
+  .hero, .letter{
+    grid-area: 1 / 1;
+    transition:opacity .8s ease, transform .8s ease;
+  }
+
+  .hero{
+    display:flex; flex-direction:column; align-items:center;
+    text-align:center;
+  }
+  .hero h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(2.2rem, 7vw, 3.4rem);
+    line-height:1.05;
+    margin:0 0 .6rem;
+    letter-spacing:-0.01em;
+  }
+  .hero p{
+    color:var(--ink-dim);
+    font-size:clamp(1rem, 2.4vw, 1.15rem);
+    margin:0 0 2.4rem;
+    max-width:32ch;
+  }
+
+  button.open-btn{
+    font-family:'Inter',sans-serif;
+    font-size:1rem; font-weight:500;
+    color:var(--ink);
+    background:var(--glass-strong);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    -webkit-tap-highlight-color:transparent;
+    padding:0.95rem 2.2rem;
+    border-radius:999px;
+    cursor:pointer;
+    animation:pulse 2.6s ease-in-out infinite;
+    transition:transform .2s ease, background .2s ease;
+  }
+  button.open-btn:hover{ background:var(--glass-border); transform:translateY(-2px); }
+  button.open-btn:active{ transform:translateY(0) scale(0.98); }
+  @keyframes pulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(255,122,41,0.35); }
+    50%{ box-shadow:0 0 0 10px rgba(255,122,41,0); }
+  }
+
+  .letter{
+    opacity:0; transform:scale(0.94);
+    pointer-events:none;
+    display:flex; align-items:stretch;
+  }
+  .letter .card{
+    width:100%;
+    background:var(--glass);
+    border:1px solid var(--glass-border);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border-radius:28px;
+    padding:clamp(1.6rem, 5vw, 2.6rem);
+    text-align:left;
+  }
+  .letter p{
+    font-size:clamp(1rem, 2.2vw, 1.08rem);
+    line-height:1.7;
+    color:var(--ink);
+    margin:0 0 1.1rem;
+  }
+  .letter p:last-child{ margin-bottom:0; }
+  .letter .sign{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    color:var(--orange);
+    margin-top:1.6rem;
+  }
+
+  body.is-open .hero{
+    opacity:0; transform:scale(0.92);
+    pointer-events:none;
+  }
+  body.is-open .letter{
+    opacity:1; transform:scale(1);
+    pointer-events:auto;
+  }
+
+  @media (max-height: 560px){
+    .hero p{ margin-bottom:1.4rem; }
+    main{ padding:4vh 6vw; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .glow{ animation:none; }
+    button.open-btn{ animation:none; }
+    .hero, .letter{ transition:opacity .3s linear; }
+    body.is-open .hero, body.is-open .letter{ transform:none; }
+  }
+</style>
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+  <div class="glow"></div>
+
+  <main>
+    <div class="stage">
+      <div class="hero">
+        <h1>Happy Birthday,<br>Dad</h1>
+        <p>Before anything else today — there's something I want you to read.</p>
+        <button class="open-btn" onclick="openLetter()">Tap to open</button>
+      </div>
+
+      <div class="letter">
+        <div class="card">
+          <p>Dad,</p>
+          <p>I don't say this enough, so I'm putting it in writing this time: thank you.</p>
+          <p>For everything you've carried for us — the parts we saw and the parts you never mentioned. You gave up more than I probably know about, and you never once made it feel like a debt we owed you.</p>
+          <p>This past year I've felt myself getting closer to you. Actually seeing you, not just as my dad but as someone who's been doing his best this whole time. I don't take that closeness for granted.</p>
+          <p>I've had a lot of people around me, but none of them have been you. That's not something I say lightly.</p>
+          <p>Happy birthday. I hope this year gives you back even a little of what you've given everyone else.</p>
+          <p class="sign">— Victor</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+<script>
+  function openLetter(){
+    document.body.classList.add('is-open');
+    burst();
+  }
+
+  var canvas = document.getElementById('confetti-canvas');
+  var ctx = canvas.getContext('2d');
+  var W, H;
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  var colors = ['#ff7a29', '#c8501a', '#e3a542', '#2a2016'];
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function makePiece(burstMode){
+    return {
+      x: burstMode ? W/2 + (Math.random()-0.5)*120 : Math.random()*W,
+      y: burstMode ? H*0.7 : Math.random()*-H,
+      w: 5 + Math.random()*5,
+      h: 8 + Math.random()*6,
+      rot: Math.random()*360,
+      vRot: (Math.random()-0.5)*6,
+      vx: burstMode ? (Math.random()-0.5)*7 : (Math.random()-0.5)*1.2,
+      vy: burstMode ? -6 - Math.random()*6 : 0.6 + Math.random()*1.4,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      gravity: burstMode ? 0.18 : 0.02
+    };
+  }
+
+  var AMBIENT = reduceMotion ? 0 : 70;
+  var pieces = [];
+  for(var i=0;i<AMBIENT;i++) pieces.push(makePiece(false));
+
+  function burst(){
+    if(reduceMotion) return;
+    for(var i=0;i<70;i++) pieces.push(makePiece(true));
+  }
+
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<pieces.length;i++){
+      var p = pieces[i];
+      p.vy += p.gravity*0.05;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.vRot;
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    }
+    pieces = pieces.filter(function(p){ return p.y < H+40; });
+    while(pieces.length < AMBIENT) pieces.push(makePiece(false));
+    if(!reduceMotion) requestAnimationFrame(tick);
+  }
+  if(!reduceMotion){
+    requestAnimationFrame(tick);
+  }
+</script>
+</body>
+</html>
